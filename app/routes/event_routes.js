@@ -26,6 +26,9 @@ const requireToken = passport.authenticate('bearer', { session: false })
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
+const multer = require('multer')
+const upload = multer()
+const uploadImage = require('../../lib/s3UploadApi')
 
 // INDEX
 // GET /events
@@ -59,19 +62,46 @@ router.get('/events/:id', (req, res, next) => {
 
 // CREATE
 // POST /events
-router.post('/events', requireToken, (req, res, next) => {
-  // set owner of new event to be current user
-  req.body.event.owner = req.user
+// router.post('/events', requireToken, (req, res, next) => {
+//   // set owner of new event to be current user
+//   req.body.event.owner = req.user
+//
+//   Event.create(req.body.event)
+//     // respond to succesful `create` with status 201 and JSON of new "event"
+//     .then(event => {
+//       res.status(201).json({ event: event.toObject() })
+//     })
+//     // if an error occurs, pass it off to our error handler
+//     // the error handler needs the error message and the `res` object so that it
+//     // can send an error message back to the client
+//     .catch(next)
+// })
 
-  Event.create(req.body.event)
-    // respond to succesful `create` with status 201 and JSON of new "event"
-    .then(event => {
-      res.status(201).json({ event: event.toObject() })
-    })
-    // if an error occurs, pass it off to our error handler
-    // the error handler needs the error message and the `res` object so that it
-    // can send an error message back to the client
-    .catch(next)
+router.post('/events', requireToken, upload.single('file'), (req, res, next) => {
+  console.log('got to post event')
+  if (req.file) {
+    uploadImage(req.file)
+      .then(awsRes => {
+        console.log('awsRes.Location', awsRes.Location)
+        req.body.owner = req.user._id
+        return Event.create({
+          name: req.body.name,
+          location: req.body.location,
+          date: req.body.date,
+          description: req.body.description,
+          owner: req.user._id,
+          image: awsRes.Location,
+          type: req.file.mimetype,
+          rsvps: []
+        })
+      })
+      .then(data => res.status(201).json({
+        event: data.toObject()
+      }))
+      .catch(next)
+  } else {
+    // console.log('no req.file')
+  }
 })
 
 // UPDATE

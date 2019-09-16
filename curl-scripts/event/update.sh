@@ -8,11 +8,6 @@ curl "${API}${URL_PATH}/${ID}" \
 --header "Authorization: Bearer ${TOKEN}" \
 --data '{
     "event": {
-      "name": "'"${NAME}"'",
-      "location": "'"${LOCATION}"'",
-      "date": "'"${DATE}"'",
-      "description": "'"${DESC}"'",
-      "owner": "'"${OWNER}"'",
-      "rsvps": []
+      "image": "'"${IMAGE}"'"
     }
   }'

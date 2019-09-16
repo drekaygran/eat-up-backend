@@ -14,7 +14,6 @@ curl "${API}${URL_PATH}" \
       "location": "'"${LOCATION}"'",
       "date": "'"${DATE}"'",
       "description": "'"${DESC}"'",
-      "owner": "'"${OWNER}"'",
       "rsvps": []
     }
   }'
