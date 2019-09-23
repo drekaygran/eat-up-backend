@@ -11,7 +11,7 @@ Anyone can browse Eat Up and view food related events, but to really harness the
 
 [Front End Github Repo](https://github.com/drekaygran/eat-up-client)
 
-[Back End Deployed Site](https://shielded-wildwood-50568.herokuapp.com/)
+[Back End Deployed Site](https://protected-coast-32234.herokuapp.com/)
 
 #### TECHNOLOGIES USED:
 -   HTML
