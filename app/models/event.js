@@ -24,7 +24,7 @@ const eventSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true
+    required: false
   },
   rsvps: [{
     type: mongoose.Schema.Types.ObjectId,
